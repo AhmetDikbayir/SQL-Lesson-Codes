@@ -198,5 +198,50 @@ FROM calisanlar3
 WHERE isyeri = (SELECT marka_isim
 				FROM markalar
 				WHERE marka_id=100);
+				
+--INTERVIEW QUESTION:calisanlar3 tablosunda max maaşı alan çalışanın tüm fieldlarını listeleyiniz. 
+
+SELECT * 
+FROM calisanlar3
+WHERE maas = (SELECT MAX(maas)
+			  FROM calisanlar3);
+			  
+--calisanlar3 tablosunda max veya min maaşı alan çalışanların
+-- tüm fieldlarını gösteriniz.ÖDEV
+
+SELECT * 
+FROM calisanlar3 
+WHERE maas = (SELECT MAX(maas) FROM calisanlar3) OR maas = (SELECT MIN(maas) FROM calisanlar3);
+
+--Interview Question:calisanlar3 tablosunda ikinci en yüksek maaşı gösteriniz.ÖDEV
+
+
+-- Ankara'da calisani olan markalarin marka id'lerini ve calisan sayilarini listeleyiniz.
+SELECT marka_id, calisan_sayisi
+FROM markalar
+WHERE marka_isim IN (SELECT isyeri
+					 FROM calisanlar3
+					 WHERE sehir ='Ankara');
+
+--marka_id'si 101’den büyük olan marka çalişanlarinin tüm bilgilerini listeleyiniz.
+SELECT *
+FROM calisanlar3
+WHERE isyeri IN (SELECT marka_isim
+				 FROM markalar
+				 WHERE marka_id>101)
+
+-- Çalisan sayisi 15.000’den cok olan markalarin isimlerini ve 
+--bu markada calisanlarin isimlerini ve maaşlarini listeleyiniz.ÖDEV
+
 
 --24-b-SUBQUERY: SELECT komutundan sonra kullanımı
+
+
+-- Her markanin id'sini, ismini ve toplam kaç şehirde bulunduğunu listeleyen bir SORGU yaziniz.
+SELECT marka_id, marka_isim,  FROM markalar;
+
+
+
+
+
+
