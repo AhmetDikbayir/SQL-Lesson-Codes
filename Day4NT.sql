@@ -132,8 +132,6 @@ INSERT INTO calisanlar3 VALUES(567890123, 'Veli Yilmaz', 'Ankara', 7000, 'Adidas
 INSERT INTO calisanlar3 VALUES(456789012, 'Ayse Gul', 'Ankara', 1500, 'Pierre Cardin');
 INSERT INTO calisanlar3 VALUES(123456710, 'Fatma Yasa', 'Bursa', 2500, 'Vakko');
 
-SELECT * FROM calisanlar3;
-
 CREATE TABLE markalar
 (
 marka_id INT UNIQUE, 
@@ -149,6 +147,25 @@ INSERT INTO markalar VALUES(103, 'LCWaikiki', 21000);
 SELECT * FROM markalar;
 SELECT * FROM calisanlar3;
 
+--calisanlar3 tablosunda max maaşı görüntüleyelim.
+SELECT MAX(maas) FROM calisanlar3;
+
+--calisanlar3 tablosunda min maaşı görüntüleyelim.
+SELECT MIN(maas) FROM calisanlar3;
+
+--calisanlar3 tablosunda ortalama maaşı görüntüleyelim.
+SELECT AVG(maas) FROM calisanlar3;
+SELECT ROUND(AVG(maas), 3) FROM calisanlar3;
+
+--calisanlar3 tablosunda toplam maaşı görüntüleyelim.
+SELECT SUM(maas) FROM calisanlar3;
+
+--calisanlar3 tablosunda kayıt sayısını görüntüleyelim.
+SELECT COUNT(*) FROM calisanlar3;
+
+--calisanlar3 tablosundaki maaşı 2500 olanların sayısını görüntüleyiniz
+SELECT COUNT(*) FROM calisanlar3 WHERE maas = 2500;
+
 --23-ALIASES:rumuz/etiket/takma isim:tablo veya sütunlara geçici isim verebiliriz.
 
 CREATE TABLE workers(
@@ -157,7 +174,29 @@ calisan_isim VARCHAR(50),
 calisan_dogdugu_sehir VARCHAR(50)
 );
 
+SELECT * FROM workers;
+--bu sorguda geçici olarak takma isim kullanalım.
+SELECT calisan_id AS id FROM workers;
+
+--daha okunabilir olan bu
+SELECT calisan_isim AS isim FROM workers;
+--sık kullanım bu
+SELECT calisan_isim isim FROM workers;
+
+SELECT calisan_isim isim FROM workers AS w;
 
 --24-SUBQUERY--NESTED QUERY
 --24-a-SUBQUERY: WHERE ile kullanımı
+
+--marka_id si 100 olan markada çalışanları listeleyiniz.
+SELECT marka_isim FROM markalar WHERE marka_id=100;
+SELECT * FROM calisanlar3 WHERE isyeri = 'Vakko';
+
+--2. yol: dinamik çözüm
+SELECT *
+FROM calisanlar3
+WHERE isyeri = (SELECT marka_isim
+				FROM markalar
+				WHERE marka_id=100);
+
 --24-b-SUBQUERY: SELECT komutundan sonra kullanımı
