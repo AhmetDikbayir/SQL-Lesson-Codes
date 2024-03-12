@@ -66,10 +66,18 @@ WHERE EXISTS (SELECT * FROM nisan WHERE nisan.urun_isim = mart.urun_isim);
 
 ---Her iki ayda birden satılan ürünlerin URUN_ISIM'lerini ve bu ürünleri
 --NİSAN ayında satın alan MUSTERI_ISIM'lerini listeleyen bir sorgu yazınız
-SELECT urun_isim, musteri_isim
-FROM nisan 
-WHERE EXISTS (SELECT * FROM mart WHERE urun_isim = nisan.urun_isim)
+SELECT musteri_isim, urun_isim 
+FROM nisan n
+WHERE EXISTS (SELECT * FROM mart m WHERE m.urun_isim = n.urun_isim)
+
+--Martta satılıp Nisanda satilmayan ürünlerin URUN_ISIM'lerini ve bu ürünleri
+--MART ayında satın alan MUSTERI_ISIM'lerini listeleyen bir sorgu yazınız. ÖDEV
  
+ 
+--CREATE: INSERT
+--READ: SELECT
+--UPDATE: UPDATE .. SET
+--DELETE: DELETE
 
 --26-UPDATE tablo_adı SET sütunadı=yeni değer 
    --WHERE koşul -- koşulu sağlayan kayıtlar güncellenir
@@ -93,6 +101,52 @@ INSERT INTO calisanlar4 VALUES(890123456, null, 'Bursa', 2500, 'Vakko');
 INSERT INTO calisanlar4 VALUES(901234567, 'Ali Han', null, 2500, 'Vakko');
 
 SELECT * FROM calisanlar4;
+
+--idsi 123456789 olan çalışanın isyeri ismini 'Trendyol' olarak güncelleyeniz.
+UPDATE calisanlar4
+SET isyeri = 'Trendyol'
+WHERE id= 123456789;
+
+-- id'si 567890123 olan çalışanın ismini 'Veli Yıldırım' ve 
+--sehirini 'Bursa' olarak güncelleyiniz.
+UPDATE calisanlar4 
+SET isim = 'Veli Yıldırım', sehir = 'Bursa'
+WHERE id=567890123;
+
+--  markalar tablosundaki marka_id değeri 102 ye eşit veya büyük olanların marka_id'sini 2 ile çarparak değiştirin.
+UPDATE markalar
+SET marka_id = marka_id*2
+WHERE marka_id>=102;
+
+SELECT * FROM markalar;
+
+-- markalar tablosundaki tüm markaların calisan_sayisi değerlerini marka_id ile toplayarak güncelleyiniz.
+UPDATE markalar
+SET calisan_sayisi = calisan_sayisi+marka_id;
+
+--calisanlar4 tablosundan Ali Seker'in isyerini, 567890123 idli çalışanın isyeri ismi ile güncelleyiniz.
+UPDATE calisanlar4
+SET isyeri = (SELECT isyeri FROM calisanlar4 WHERE id=567890123)
+WHERE isim = 'Ali Seker';
+
+--calisanlar4 tablosunda maasi 1500 olanların isyerini, markalar tablosunda
+--marka_id=101 olan markanın ismi ile değiştiriniz.
+
+UPDATE calisanlar4
+SET isyeri = (SELECT marka_isim FROM markalar WHERE marka_id =101)
+WHERE maas = 1500;
+
+SELECT * FROM calisanlar4;
+
+--calisanlar4 tablosundaki isyeri 'Vakko' olanların sehir bilgisinin sonuna ' Şubesi' ekleyiniz.
+UPDATE calisanlar4
+SET sehir = sehir || ' Şubesi'
+WHERE isyeri = 'Vakko';
+
+--ALTERNATİF
+UPDATE calisanlar4
+SET sehir = CONCAT(sehir, ' Şubesi')
+WHERE isyeri = 'Vakko';
 
 --27-IS NULL condition  
 --calisanlar4 tablosunda isim sütunu null olanları listeleyiniz.
@@ -144,3 +198,71 @@ INSERT INTO person VALUES(256789013, 'Veli','Cem', 'Bursa');
 INSERT INTO person VALUES(256789010, 'Samet','Bulut', 'Ankara'); 
 
 SELECT * FROM person;
+
+--person tablosundaki tüm kayıtları adrese göre (artan)
+--sıralayarak listeleyiniz.
+
+SELECT *
+FROM person
+ORDER BY adres;--default:ASC
+--------------
+SELECT *
+FROM person
+ORDER BY adres ASC;--ascending , natural order
+
+--person tablosundaki tüm kayıtları soyisim göre (azalan)
+--sıralayarak listeleyiniz.
+SELECT *
+FROM person
+ORDER BY soyisim DESC;--descending
+
+--person tablosundaki soyismi Bulut olanları isime göre (azalan) sıralayarak listeleyiniz.
+SELECT *
+FROM person
+WHERE soyisim = 'Bulut'
+ORDER BY isim DESC;
+
+--alternatif
+SELECT *
+FROM person
+WHERE soyisim = 'Bulut'
+ORDER BY 2 DESC;--not recommended: tavsiye edilmez.
+
+--person tablosundaki tüm kayıtları isme göre (azalan),soyisme göre artan
+--sıralayarak listeleyiniz.
+SELECT *
+FROM person
+ORDER BY isim DESC, soyisim ASC;
+
+--İsim ve soyisim değerlerini, soyisim kelime uzunluklarına göre sıralayarak listeleyiniz.
+SELECT isim, soyisim, LENGTH(soyisim) AS karakter_sayisi
+FROM person
+ORDER BY LENGTH (soyisim);
+
+------------
+SELECT isim, soyisim, LENGTH(soyisim) AS karakter_sayisi
+FROM person
+ORDER BY karakter_sayisi;
+
+--Tüm isim ve soyisim değerlerini aralarında bir boşluk ile aynı sutunda çağırarak her bir isim ve 
+--soyisim değerinin toplam uzunluğuna göre sıralayınız.
+
+SELECT CONCAT(isim, ' ', soyisim) AS isim_soyisim
+FROM person
+ORDER BY LENGTH(isim)+ LENGTH(soyisim);
+
+------
+SELECT CONCAT(isim, ' ', soyisim) AS isim_soyisim, LENGTH(isim)+ LENGTH(soyisim) toplam_karakter
+FROM person
+ORDER BY toplam_karakter;
+
+--calisanlar4 tablosunda maaşı ortalama maaştan yüksek olan çalışanların
+--isim,şehir ve maaşlarını maaşa göre artan sıralayarak listeleyiniz.
+SELECT isim, sehir, maas
+FROM calisanlar4
+WHERE maas> (SELECT AVG(maas) FROM calisanlar4)
+ORDER BY maas;
+
+
+
+
