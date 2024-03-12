@@ -214,7 +214,10 @@ FROM calisanlar3
 WHERE maas = (SELECT MAX(maas) FROM calisanlar3) OR maas = (SELECT MIN(maas) FROM calisanlar3);
 
 --Interview Question:calisanlar3 tablosunda ikinci en yüksek maaşı gösteriniz.ÖDEV
-
+SELECT MAX(maas)
+FROM calisanlar3
+WHERE maas < (SELECT MAX(maas)
+			 FROM calisanlar3)
 
 -- Ankara'da calisani olan markalarin marka id'lerini ve calisan sayilarini listeleyiniz.
 SELECT marka_id, calisan_sayisi
@@ -238,7 +241,13 @@ WHERE isyeri IN (SELECT marka_isim
 
 
 -- Her markanin id'sini, ismini ve toplam kaç şehirde bulunduğunu listeleyen bir SORGU yaziniz.
-SELECT marka_id, marka_isim,  FROM markalar;
+SELECT marka_id, marka_isim, (SELECT COUNT(DISTINCT sehir) 
+							  FROM calisanlar3 WHERE isyeri=marka_isim) AS sehir_sayisi  
+FROM markalar;
+
+
+--SELECT DISTINCT(sehir) FROM calisanlar3: sadece tekrarsız olanları alır
+
 
 
 
