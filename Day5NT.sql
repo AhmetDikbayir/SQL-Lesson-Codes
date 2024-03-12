@@ -2,7 +2,13 @@
 
 -- Her markanin ismini, calisan sayisini ve o markaya ait calisanlarin maksimum 
 --ve min maaşını listeleyen bir Sorgu yaziniz.
-SELECT marka_isim, calisan_sayisi  FROM markalar;
+SELECT marka_isim, calisan_sayisi, (SELECT MAX(maas) 
+									FROM calisanlar3 
+									WHERE isyeri = marka_isim) AS maksimum_maas,
+									(SELECT MIN(maas) 
+									 FROM calisanlar3 
+									 WHERE isyeri = marka_isim) minimum_maas
+FROM markalar;
 
 
 --25-EXISTS Cond.
@@ -43,6 +49,27 @@ INSERT INTO nisan VALUES (20, 'Mine', 'Toyota');
 select * from mart;
 select * from nisan;
 
+--Mart ayında 'Toyota' satışı yapılmış ise Nisan ayındaki tüm ürünlerin bilgilerini listeleyiniz.
+SELECT * FROM nisan WHERE EXISTS (SELECT * FROM mart WHERE urun_isim='Toyota');
+
+--Mart ayında 'Volvo' satışı yapılmış ise Nisan ayındaki tüm ürünlerin bilgilerini listeleyiniz.
+SELECT *
+FROM nisan
+WHERE EXISTS (SELECT * FROM mart WHERE urun_isim = 'Volvo');
+
+--Mart ayında satılan ürünün urun_id ve musteri_isim'lerini, 
+--eğer Nisan ayında da satılmışsa, listeleyen bir sorgu yazınız. 
+
+SELECT urun_id, musteri_isim
+FROM mart
+WHERE EXISTS (SELECT * FROM nisan WHERE nisan.urun_isim = mart.urun_isim);
+
+---Her iki ayda birden satılan ürünlerin URUN_ISIM'lerini ve bu ürünleri
+--NİSAN ayında satın alan MUSTERI_ISIM'lerini listeleyen bir sorgu yazınız
+SELECT urun_isim, musteri_isim
+FROM nisan 
+WHERE EXISTS (SELECT * FROM mart WHERE urun_isim = nisan.urun_isim)
+ 
 
 --26-UPDATE tablo_adı SET sütunadı=yeni değer 
    --WHERE koşul -- koşulu sağlayan kayıtlar güncellenir
