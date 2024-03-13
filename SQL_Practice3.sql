@@ -102,6 +102,9 @@ WHERE sirket_ismi IN (SELECT sirket_ismi FROM sirketler WHERE memur_Sayisi>1800)
 --sirket id'lerini ve memurlar sayilarini listeleyiniz
 
 
+--Soru 7: eger giresunda bir tane bile memur varsa tum sirketleri yazdirin
+
+
 
 
 
