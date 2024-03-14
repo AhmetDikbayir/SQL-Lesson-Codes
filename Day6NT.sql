@@ -276,6 +276,11 @@ SELECT sehir FROM testers
 EXCEPT
 SELECT city FROM developers
 
- --ÖDEV:mart ve nisan tablolarındaki tüm ürünlerin isimlerini tekrarsız listeleyiniz.  
+ --ÖDEV:mart ve nisan tablolarındaki tüm ürünlerin isimlerini tekrarsız listeleyiniz. 
+SELECT urun_isim
+FROM mart
+UNION
+SELECT urun_isim 
+FROM nisan
  --ÖDEV:mart ve nisan tablolarındaki ortak ürünlerin isimlerini listeleyiniz.
  --ÖDEV:mart ayında satılıp nisan ayında satılmayan ürünlerin isimlerini listeleyiniz.
