@@ -120,11 +120,12 @@ HAVING SUM(maas)>10000;
 
 --Eğer bir departmanda çalışan personel(id) sayısı 1’den çoksa departman ve personel sayısını veren sorgu yazınız
 
-SELECT id, departman
-FROM 
+SELECT departman, COUNT(id)
+FROM personel
+GROUP BY departman
+HAVING COUNT(id)>1
 
-
-
+--Eğer bir şehirde alınan MAX maas 5000’den düşükse sehir ismini ve MAX maasi veren sorgu yazınız.ÖDEV
 
 
 
@@ -160,6 +161,23 @@ INSERT INTO developers(name,email,salary,prog_lang,city,age) VALUES('Betül Çet
 INSERT INTO developers(name,email,salary,prog_lang,city,age) VALUES('Ayse Gul','ayse@mail.com',4000,'C#','Ankara',29);
 INSERT INTO developers(name,email,salary,prog_lang,city,age) VALUES('Ali Seker','ali@mail.com',4000,'C#','Ankara',29);
 
+CREATE TABLE testers (
+id INT UNIQUE, 
+isim VARCHAR(50), 
+sehir VARCHAR(50), 
+maas INT, 
+isyeri VARCHAR(20)
+);
+
+INSERT INTO testers VALUES(12, 'Ali Seker', 'Istanbul', 2500, 'Vakko'),
+(13, 'Ayse Gul', 'Istanbul', 1500, 'LCWaikiki'),
+(14, 'Ahmet Han', 'Ankara', 3000, 'Vakko'),
+(15, 'Veli Yilmaz', 'Izmir', 1000, 'Pierre Cardin'),
+(16, 'Selim Can', 'Ankara', 7000, 'Adidas'),
+(17, 'Ayse Gul', 'Ankara', 1500, 'Pierre Cardin'),
+(18, 'Fatma Yasa', 'Bursa', 2500, 'Vakko'),
+(19, 'Betül Şen', 'Bursa', 2500, 'Vakko'),
+(20, 'Ali Han', 'Antalya', 2500, 'Vakko');
 
 CREATE TABLE contact_info(
 address_id int,
@@ -181,13 +199,83 @@ INSERT INTO contact_info VALUES(8,'Dev Sok.',8,'Van');
 
 SELECT * FROM developers;
 SELECT * FROM contact_info;
-SELECT * FROM calisanlar4;
+SELECT * FROM testers;
 
+--Ankarada yaşayan developer ve İstanbulda yaşayan
+--testerların isimlerini
+--birlikte tekrarsız gösteren sorguyu yaziniz
+
+SELECT name FROM developers WHERE city='Ankara'
+UNION
+SELECT isim FROM testers WHERE sehir='Istanbul'
+
+-- developer ve testerların isimlerini
+--tekrarlı gösteren sorguyu yaziniz
+
+SELECT name FROM developers
+UNION ALL
+SELECT isim FROM testers
+
+--Yaşı 25’den büyük olan developer isimlerini ve 
+--yaşı 30'dan küçük developerların kullandığı prog. dillerini 
+--birlikte tekrarlı gösteren sorguyu yaziniz
+SELECT name AS name_prog_lang
+FROM developers
+WHERE age>25
+UNION ALL
+SELECT prog_lang
+FROM developers
+WHERE age<30
+
+--NOT: UNION/UNION ALL ile birlestirdiğimiz sorgular
+--aynı sayıda sütunu göstermeli
+--alt alta gelecek olan sütunlar aynı data tipinde olmalı
+
+--Java kullanan developerların maaşını ve şehrini ve 
+--Vakkoda çalışan testerların maaşını ve şehrini
+--tekrarsız gösteren sorguyu yaziniz
+SELECT city, salary
+FROM developers
+WHERE prog_lang = 'Java'
+UNION
+SELECT sehir, maas
+FROM testers
+WHERE isyeri = 'Vakko'
+ORDER BY city;
 
 --32-INTERSECT:iki farklı sorgunun sonuçlarından ortak olanları(kesişimi)
 --tekrarsız olarak gösterir.
 
+--developers tablosundaki şehirler ve
+--tester tablosunda sehirlerin
+--aynı olanlarını tekrarsız olarak listeleyiniz
 
+SELECT city FROM developers--16
+INTERSECT --ALL:tekrarlı olanları da gösterir
+SELECT sehir FROM testers--9
+
+--developers tablosunda Java kullananların çalıştıkları şehirler ve
+--testers tablosunda maaşı 1000 den fazla olanların sehirlerinden 
+--ortak olanlarını listeleyiniz.ÖDEV
+SELECT city
+FROM developers
+WHERE prog_lang='Java'
+INTERSECT
+SELECT sehir
+FROM testers
+WHERE maas>1000
 
 --33-EXCEPT:bir sorgunun sonuçlarından diğer bir sorgunun sonuçlarından 
 --farklı olanları gösterir.
+
+--developers tablosundaki şehirleri
+--testers tablosunda sehirler hariç olarak listeleyiniz
+SELECT city FROM developers
+EXCEPT
+SELECT sehir FROM testers
+EXCEPT
+SELECT city FROM developers
+
+ --ÖDEV:mart ve nisan tablolarındaki tüm ürünlerin isimlerini tekrarsız listeleyiniz.  
+ --ÖDEV:mart ve nisan tablolarındaki ortak ürünlerin isimlerini listeleyiniz.
+ --ÖDEV:mart ayında satılıp nisan ayında satılmayan ürünlerin isimlerini listeleyiniz.
