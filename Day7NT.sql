@@ -205,6 +205,13 @@ FROM words
 WHERE word ~* 'h[a-k]t'; --hat, hbt, hct, hkt gelir
 -- ~* büyük küçük harf fark etmeksizin getirir
 
+INSERT INTO words VALUES (1020, 'haat', 4)
+
+--h ile başlayan ve t ile biten arasında a ile k harfleri arasındaki harflerden bulunan QUERY yazın
+SELECT word
+FROM words
+WHERE word ~* 'h[a-k](.*)t';
+
 -- Icinde m veya i olan kelimelerin tum bilgilerini yazdiran QUERY yazin
 SELECT *
 FROM words
