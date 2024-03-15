@@ -173,6 +173,8 @@ SELECT *
 FROM developers
 WHERE prog_lang LIKE '__v_'
 
+
+
 --38-REGEXP_LIKE(~):belirli bir karakter deseni(regex) içeren kayıtları filtrelemeyi sağlar
 
 --words ile devam edelim
@@ -210,6 +212,11 @@ WHERE word ~* '[mi]'
 
 --^ : başlangıcı gösterir
 --$ : bitişi gösterir
+
+--developers tablosunda programlama dili j harfi ile başlayanların tüm bilgilerini getiren QUERY
+SELECT *
+FROM developers
+WHERE prog_lang ~* '^j'
 
 --a ile baslayan kelimelerin tum bilgilerini yazdiran QUERY yazin
 SELECT *
