@@ -46,17 +46,38 @@ FROM personels
 WHERE salary != 21000;
 
 -- 7) ismi a harfi ile başlayan personel bilgilerini listeleyiniz.
-
+SELECT *
+FROM personels
+WHERE name  ILIKE 'a%';
+--alternative query
+SELECT *
+FROM personels
+WHERE name ~* '^a';
 
 -- 8) ismi n harfi ile biten personel bilgilerini listeleyiniz.
-
+SELECT *
+FROM personels
+WHERE name ILIKE '%n';
+--alternative query
+SELECT *
+FROM personels
+WHERE name ~* 'n$';
 
 -- 9) email adresi gmail olan personel bilgilerini listeleyiniz.
-
+SELECT *
+FROM personels
+WHERE email LIKE '%gmail%';
+--alternative query
+SELECT *
+FROM personels
+WHERE email ~* 'gmail';
 
 -- 10) email adresi gmail olmayan personel bilgilerini listeleyiniz.
-
-
-
-
+SELECT *
+FROM personels
+WHERE email NOT LIKE '%gmail%';
+--alternative query
+SELECT *
+FROM personels
+WHERE email !~* 'gmail';
 
