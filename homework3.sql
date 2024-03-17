@@ -17,4 +17,46 @@ INSERT INTO personels VALUES(1, 'Ali', 39, 12500, 'ali@gmail.com'),
 (8, 'Elif', 27, 14000, 'elif@gmail.com'),
 (9, 'Ezgi', 35, 21000, 'ezgi@gmail.com');
 
-SELECT * FROM personels;
+-- 1) Tablo bilgilerini listeleyiniz.
+SELECT *
+FROM personels;
+
+-- 2) isim, yaş ve maaş bilgilerini listeleyiniz
+SELECT name, age, salary
+FROM personels;
+
+-- 3) id'si 8 olan personel bilgilerini listeleyiniz
+SELECT *
+FROM personels
+WHERE id = 8;
+
+-- 4) id'si 5 olan personelin isim, yaş ve email bilgilerini listeleyiniz
+SELECT name, age, email
+FROM personels
+WHERE id = 5;
+
+-- 5) 30 yaşından büyük personel bilgilerini listeleyiniz.
+SELECT *
+FROM personels
+WHERE age>30;
+
+-- 6) maası 21000 olmayan personel bilgilerini listeleyiniz.
+SELECT *
+FROM personels
+WHERE salary != 21000;
+
+-- 7) ismi a harfi ile başlayan personel bilgilerini listeleyiniz.
+
+
+-- 8) ismi n harfi ile biten personel bilgilerini listeleyiniz.
+
+
+-- 9) email adresi gmail olan personel bilgilerini listeleyiniz.
+
+
+-- 10) email adresi gmail olmayan personel bilgilerini listeleyiniz.
+
+
+
+
+
