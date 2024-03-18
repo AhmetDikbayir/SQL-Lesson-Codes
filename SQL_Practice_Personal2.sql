@@ -71,4 +71,12 @@ CONSTRAINT cust_fk FOREIGN KEY(product_id) REFERENCES products(id)
 SELECT *
 FROM customers;
 
+CREATE TABLE people(
+id INTEGER PRIMARY KEY,
+name VARCHAR(20),
+age INTEGER CHECK (age>18)
+);
 
+INSERT INTO people VALUES(1, 'Ahmet', 28);
+
+SELECT * FROM people
