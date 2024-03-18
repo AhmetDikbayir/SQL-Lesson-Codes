@@ -214,12 +214,12 @@ ALTER COLUMN id TYPE INTEGER USING id::integer;
 
 --employees tablosunda isim sütununa NOT NULL constrainti ekleyiniz.
 ALTER TABLE employees
-ALTER COLUMN isim SET NOT NULL
+ALTER COLUMN isim SET NOT NULL;
 
 --NOT: içinde kayıtlar bulunan bir tabloya constraint eklemek
 --istersek, o sütundaki datalar eklenen constrainti sağlamak zorunda.
 
-INSERT INTO employees(sehir) VALUES ('Ankara')
+INSERT INTO employees(sehir) VALUES ('Ankara');
 
 SELECT *
 FROM employees;
@@ -245,14 +245,124 @@ ALTER TABLE orders
 DROP CONSTRAINT orders_company_id_fkey
 
 --employees tablosunda isim sütununda NOT NULL constraintini kaldırınız.
-
-
+ALTER TABLE employees
+ALTER COLUMN isim DROP NOT NULL;
 
 SELECT * FROM orders
-
 
 --42-TRANSACTION:databasede en küçük işlem birimi 
 --       BEGIN:transactionı başlatır
 --       COMMIT:transactionı onaylar ve sonlandırır
 --       SAVEPOINT: kayıt noktası oluşturur
 --       ROLLBACK:değişikleri mevcut duruma geri döndürür,transactionı sonlandırır
+
+--pgAdmin: auto-commit
+
+CREATE TABLE hesaplar
+(
+hesap_no int UNIQUE,
+isim VARCHAR(50),
+bakiye real       
+);--hesaplar tablosu 1 transactionda oluşturulur, auto-commit
+
+INSERT INTO hesaplar VALUES(123,'Barnie',10000.3),
+(124,'Fred',9000.5),
+(125,'Wilma',8000.5),
+(126,'Betty',7000.5);
+
+DELETE FROM hesaplar
+WHERE hesap_no=123;
+
+DELETE FROM hesaplar
+WHERE hesap_no=124;
+
+UPDATE hesaplar
+SET bakiye = bakiye+1000
+WHERE hesap_no = 125;
+
+UPDATE hesaplar
+SET bakiye = bakiye-1000
+WHERE hesap_no = 126;
+
+SELECT * FROM hesaplar;
+
+------------------------------------
+BEGIN;
+CREATE TABLE hesaplar2
+(
+hesap_no int UNIQUE,
+isim VARCHAR(50),
+bakiye real       
+);
+COMMIT;
+
+INSERT INTO hesaplar2 VALUES(123,'Barnie',10000.3),
+(124,'Fred',9000.5),
+(125,'Wilma',8000.5),
+(126,'Betty',7000.5);
+
+BEGIN;--yeni transaction 
+
+DELETE FROM hesaplar2 WHERE hesap_no=126;
+DELETE FROM hesaplar2 WHERE hesap_no=124;
+ROLLBACK;
+
+
+--negatif durum
+BEGIN;
+UPDATE hesaplar2 SET bakiye = bakiye -1000 WHERE hesap_no = 126;
+--sistemde problem oluştu
+UPDATE hesaplar2 SET bakiye = bakiye+1000 WHERE hesap_no = 125;
+ROLLBACK;
+
+--pozitif senaryo
+--try{
+BEGIN;
+UPDATE hesaplar2
+SET bakiye = bakiye-1000 WHERE hesap_no = 126;
+UPDATE hesaplar2
+SET bakiye = bakiye+1000 WHERE hesap_no = 125;
+COMMIT;
+--}catch(){
+ROLLBACK;--En son commitlenmiş haline döner.
+--}
+
+SELECT * FROM hesaplar2;
+DROP TABLE hesaplar2;
+-----------------------------
+BEGIN;
+CREATE TABLE hesaplar3
+(
+hesap_no int UNIQUE,
+isim VARCHAR(50),
+bakiye real       
+);--hesaplar tablosu 1 transactionda oluşturulur, auto-commit
+
+INSERT INTO hesaplar3 VALUES(123,'Barnie',10000.3),
+(124,'Fred',9000.5),
+(125,'Wilma',8000.5),
+(126,'Betty',7000.5);
+
+SAVEPOINT x;
+
+DELETE FROM hesaplar3
+WHERE hesap_no=123;
+
+DELETE FROM hesaplar3
+WHERE hesap_no=124;
+
+UPDATE hesaplar3
+SET bakiye = bakiye+1000
+WHERE hesap_no = 125;
+
+UPDATE hesaplar3
+SET bakiye = bakiye-1000
+WHERE hesap_no = 126;
+
+--X noktasına geri döndürür
+--çok işlem varsa arka arkaya aralara SAVEPOINT ler atılabilir.
+ROLLBACK TO x;
+ROLLBACK;
+
+SELECT * FROM hesaplar3;
+
