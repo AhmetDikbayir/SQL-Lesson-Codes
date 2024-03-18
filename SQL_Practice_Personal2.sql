@@ -17,12 +17,6 @@ CONSTRAINT std_pk PRIMARY KEY(id)
 SELECT* 
 FROM students;
 
-ALTER TABLE students2
-ADD COLUMN course_id INTEGER,
-ADD CONSTRAINT fk_course_id
-	FOREIGN KEY(course_id)
-	REFERENCES courses(id);
-
 CREATE TABLE courses(
 id INTEGER,
 name VARCHAR(20),
@@ -36,6 +30,14 @@ INSERT INTO courses VALUES (100, 'Math'),
 (102, 'Chemistry'),
 (103, 'Biology'),
 (104, 'Algebria');
+
+--Updated students2 table
+ALTER TABLE students2
+ADD COLUMN course_id INTEGER,
+ADD CONSTRAINT fk_course_id
+	FOREIGN KEY(course_id)
+	REFERENCES courses(id);
+
 
 INSERT INTO students2 VALUES(1, 'Ali Han', 85, '2024-03-14');
 INSERT INTO students2 VALUES(2, 'Ali Can', 85, '2024/03/14');
@@ -51,5 +53,22 @@ WHERE id = 2;
 SELECT *
 FROM students2;
 
+CREATE TABLE products(
+id INTEGER,
+name VARCHAR(20),
+company VARCHAR(20),
+CONSTRAINT product_pk PRIMARY KEY(id)
+)
+
+CREATE TABLE customers(
+id INTEGER,
+name VARCHAR(20),
+product_id INTEGER,
+CONSTRAINT cust_pk PRIMARY KEY(id),
+CONSTRAINT cust_fk FOREIGN KEY(product_id) REFERENCES products(id)
+);
+
+SELECT *
+FROM customers;
 
 
