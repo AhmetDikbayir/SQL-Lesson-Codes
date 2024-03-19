@@ -139,10 +139,36 @@ SELECT *
 FROM ogrenciler
 WHERE isim ~* 'i$';
 
+--Soru 3: İsimleri 'A' harfi ile başlayan ve 'Bilgisayar bölümünde 
+--okuyan öğrencilerin bilgilerini getirin.
+SELECT *
+FROM ogrenciler
+WHERE isim ILIKE 'A%' AND bolum = 'Bilgisayar';
 
+--soru 4: isimleri 'n' harfi iceren ogrencileri getirin
+SELECT *
+FROM ogrenciler
+WHERE isim ILIKE '%n%';
 
+--soru 5: isimleri 'A' harfi ile baslamayan ogrencileri getirin
+SELECT *
+FROM ogrenciler
+WHERE isim NOT ILIKE 'A%'
 
+--soru 6 : isimleri 12 karakterden daha uzun olan ogrencileri getirin
+SELECT *
+FROM ogrenciler
+WHERE LENGTH(isim)>12;
 
+--soru 7 : 4. harfi a olan ogrenci bilgilerini getirin
+SELECT *
+FROM ogrenciler
+WHERE isim ILIKE '___a%'
+
+--soru 8 : isminin icinde z veya k harfi gecen ogrencileri getirin
+SELECT *
+FROM ogrenciler
+WHERE isim ~* '[k,z]'
 
 
 
