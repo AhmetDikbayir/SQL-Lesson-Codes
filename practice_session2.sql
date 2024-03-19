@@ -170,6 +170,16 @@ SELECT *
 FROM ogrenciler
 WHERE isim ~* '[k,z]'
 
+--soru 9 : ismi Y veya N ile baslayan ogrenci bilgilerini getir
+SELECT *
+FROM ogrenciler
+WHERE isim ILIKE 'Y%' OR isim ILIKE 'n%';
+
+--alternative
+SELECT *
+FROM ogrenciler
+WHERE isim ~* '^[YN]';
+
 
 
 
