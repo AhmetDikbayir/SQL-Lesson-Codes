@@ -203,7 +203,14 @@ WHERE maas = (SELECT MAX(maas)
 
 --calisanlar3 tablosunda max veya min maaşı alan çalışanların
 -- tüm fieldlarını gösteriniz.ÖDEV
+SELECT *
+FROM calisanlar3
+WHERE maas IN ((SELECT MIN(maas) FROM calisanlar3), (SELECT MAX(maas) FROM calisanlar3))
 
+
+SELECT *
+FROM calisanlar3
+WHERE maas = (SELECT MIN(maas) FROM calisanlar3) OR maas=(SELECT MAX(maas) FROM calisanlar3)
 --Interview Question:calisanlar3 tablosunda ikinci en yüksek maaşı gösteriniz.ÖDEV
 
 -- Ankara’da calisani olan markalarin marka id'lerini ve calisan sayilarini listeleyiniz.

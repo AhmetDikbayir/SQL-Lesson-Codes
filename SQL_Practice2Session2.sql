@@ -51,7 +51,7 @@ insert into dersler values(7, 'Tarih', 2);
 --ders isimleri ve ogr isimleri
 SELECT d.ders_isim, o.ogr_isim 
 FROM dersler d
-LEFT JOIN ogrenciler o ON d.ders_id = o.ders_id
+LEFT JOIN ogrenciler o ON d.ders_id = o.ders_id;
 
 
 --SORU2: tum ogrencileri ve varsa bu ogrencilerin aldıkları dersleri listeleyiniz
@@ -71,7 +71,7 @@ ON o.ders_id = d.ders_id;
 SELECT o.ogrt_isim, d.ders_isim
 FROM ogretmenler o
 LEFT JOIN dersler d
-ON o.ders_id = d.ders_id
+ON o.ders_id = d.ders_id;
 
 
 --SORU4: tum dersleri ve varsa bu derslerin ogretmenlerini listeleyiniz
@@ -82,7 +82,7 @@ ON o.ders_id = d.ders_id
 SELECT d.ders_isim, o.ogrt_isim
 FROM dersler d
 LEFT JOIN ogretmenler o
-ON o.ders_id = d.ders_id
+ON o.ders_id = d.ders_id;
 
 
 --SORU5: tum ogretmenleri ve varsa  bu ogretmenlerin 
@@ -90,7 +90,12 @@ ON o.ders_id = d.ders_id
 --esas tablomuz nedir : ogretmenler
 --left join
 --ogrt_isim ve ogr_isim
-select ogrt_isim,ogr_isim from ogretmenler left join ogrenciler on ogretmenler.ders_id=ogrenciler.ders_id; 
+
+SELECT ogrt.ogrt_isim, ogr.ogr_isim
+FROM ogretmenler ogrt
+LEFT JOIN ogrenciler ogr
+ON ogrt.ders_id = ogr.ders_id;
+ 
 
 --SORU6: ogrenciler tablosundaki ogrencilerden sadece
 --dersler tablosundaki derslerden herhangi birini 
@@ -98,34 +103,47 @@ select ogrt_isim,ogr_isim from ogretmenler left join ogrenciler on ogretmenler.d
 --esas tablo nedir : yoktur
 --inner join
 --ogr_isim
-select ogr_isim,ders_isim from ogrenciler 
-inner join dersler on dersler.ders_id=ogrenciler.ders_id;
+
+SELECT o.ogr_isim, d.ders_isim
+FROM ogrenciler o
+INNER JOIN dersler d
+ON o.ders_id = d.ders_id;
 
 --SORU7: tum dersleri ve tum ogrenci isimlerini listeleyiniz
 --full join
 --ders_isim ve ogr_isim
-select ders_isim,ogr_isim from ogrenciler full join dersler on ogrenciler.ders_id=dersler.ders_id
 
-drop table memurlar2;
+SELECT o.ogr_isim, d.ders_isim
+FROM ogrenciler o
+FULL JOIN dersler d
+ON o.ders_id = d.ders_id;
+
+
 create table memurlar2(
 memur_id int PRIMARY key,
 memur_isim VARCHAR(50),
 memur_maas int
 );
 
-Insert into memurlar2 VALUES(1,'çiğdem',100000);
-INSERT into memurlar2 VALUES(2,'Duygu',150000);
-Insert into memurlar2 values(3,'Aykut',110000);
-INSERT into memurlar2 values(4,'Sıla');
+INSERT INTO memurlar2 VALUES(1,'çiğdem',100000);
+INSERT INTO memurlar2 VALUES(2,'Duygu',150000);
+INSERT INTO memurlar2 VALUES(3,'Aykut',110000);
+INSERT INTO memurlar2 VALUES(4,'Sıla');
 --sila hanima maas degeri atamasi yapalim
-update memurlar2 set memur_maas=200000 where memur_isim='Sıla';
+UPDATE memurlar2
+SET memur_maas = 400000
+WHERE memur_isim = 'Sıla';
 
 --En dusuk veya en yuksek maas degerlerinin oldugu kayıtları listeleyin
---1. yol
-select * from memurlar2 where
-memur_maas=(select max(memur_maas)from memurlar2)
-or memur_maas=(select min(memur_maas)from memurlar2)
+
+SELECT *
+FROM memurlar2
+WHERE memur_maas = (SELECT MAX(memur_maas) 
+					FROM memurlar2) 
+					OR memur_maas = (SELECT MIN(memur_maas) 
+									 FROM memurlar2);
 --2.yol union
-select * from memurlar2 where memur_maas=(select max(memur_maas)from memurlar2)
-union
-select * from memurlar2 where memur_maas=(select min(memur_maas)from memurlar2);
+SELECT * FROM memurlar2 WHERE memur_maas=(SELECT MAX(memur_maas) FROM memurlar2)
+UNION
+SELECT * FROM memurlar2 WHERE memur_maas=(SELECT min(memur_maas) FROM memurlar2);
+
