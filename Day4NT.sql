@@ -114,6 +114,8 @@ SELECT *
 FROM musteriler 
 WHERE urun_id NOT BETWEEN 20 AND 30;
 
+--CREATE VİEW araştır!!!!
+
 --22-AGGREGATE Fonk.:toplamsal fonk
 
 CREATE TABLE calisanlar3 (
@@ -149,6 +151,9 @@ SELECT * FROM calisanlar3;
 
 --calisanlar3 tablosunda max maaşı görüntüleyelim.
 SELECT MAX(maas) FROM calisanlar3;
+
+--MAX isim uzunluğuna sahip olan çalıisanin isim uzunluğunu veren query
+SELECT LENGTH(MAX(isim))-1 AS isim_uzunluk FROM calisanlar3
 
 --calisanlar3 tablosunda min maaşı görüntüleyelim.
 SELECT MIN(maas) FROM calisanlar3;
@@ -189,6 +194,7 @@ SELECT calisan_isim isim FROM workers AS w;
 --24-a-SUBQUERY: WHERE ile kullanımı
 
 --marka_id si 100 olan markada çalışanları listeleyiniz.
+
 SELECT marka_isim FROM markalar WHERE marka_id=100;
 SELECT * FROM calisanlar3 WHERE isyeri = 'Vakko';
 
@@ -198,7 +204,21 @@ FROM calisanlar3
 WHERE isyeri = (SELECT marka_isim
 				FROM markalar
 				WHERE marka_id=100);
-				
+--Ali Seker' in çalıştığı kurumdaki toplam çalışan sayısını bulan query
+SELECT calisan_sayisi 
+FROM markalar
+WHERE marka_isim = (SELECT isyeri FROM calisanlar3 WHERE isim = 'Ali Seker')
+
+----------------------------------------------------------------------
+--Vakko'nun Istanbul mağazalarında toplam çalışan sayısını bulan query
+SELECT SUM(calisan_sayisi)
+FROM calisanlar3 c
+INNER JOIN markalar m
+ON c.isyeri = m.marka_isim
+WHERE m.marka_isim = 'Vakko' AND c.sehir ='Istanbul'
+-----------------------------------------------------------------
+
+
 --INTERVIEW QUESTION:calisanlar3 tablosunda max maaşı alan çalışanın tüm fieldlarını listeleyiniz. 
 
 SELECT * 
@@ -208,7 +228,11 @@ WHERE maas = (SELECT MAX(maas)
 			  
 --calisanlar3 tablosunda max veya min maaşı alan çalışanların
 -- tüm fieldlarını gösteriniz.ÖDEV
+SELECT *
+FROM calisanlar3
+WHERE maas IN ((SELECT MIN(maas) FROM calisanlar3), (SELECT MAX(maas) FROM calisanlar3));
 
+--alternative way
 SELECT * 
 FROM calisanlar3 
 WHERE maas = (SELECT MAX(maas) FROM calisanlar3) OR maas = (SELECT MIN(maas) FROM calisanlar3);
